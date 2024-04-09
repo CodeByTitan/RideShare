@@ -1,0 +1,16 @@
+<!-- templates/available_rides.html -->
+{% extends 'index.html' %}  <!-- Assuming you have a base layout template -->
+
+{% block content %}
+    <h2>Available Rides</h2>
+    <div class="list-group">
+        {% for ride in rides %}
+            <a href="#" class="list-group-item list-group-item-action">
+                <h5 class="mb-1">{{ ride.start }} to {{ ride.end }}</h5>
+                <p class="mb-1">Driver: {{ ride.driver }} | Date: {{ ride.date }} | Cost: {{ ride.cost }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+

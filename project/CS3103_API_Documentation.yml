@@ -1,0 +1,328 @@
+openapi: 3.0.3
+info:
+  title: Ride Share Service
+  version: 1.0.11
+  description: API documentation for CS3103 ride share service term project
+  contact: 
+    name: Ben Legere, Arsh Sethi
+    email: blegere1@unb.ca
+tags:
+  - name: ride
+    description: "Endpoints related to rides"
+  - name: user
+    description: "Endpoints related to users"
+paths:
+  /users/{uId}/rides:
+    get:
+      tags:
+        - ride
+      summary: Find all available rides 
+      description: Returns a list of rides
+      operationId: getAvailableRides
+      parameters:
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ride'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ride not found
+  /users/{uId}/ride:
+    put:
+      tags:
+        - ride
+      summary: Update an existing ride
+      description: Update an existing ride by Id
+      operationId: updateRide
+      parameters:
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent ride
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ride'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ride not found
+    post:
+      tags:
+        - ride
+      summary: Add a new ride
+      description: Add a new ride
+      operationId: addRide
+      parameters:
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Add a new ride
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ride'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+        '400':
+          description: Invalid input
+  /users/{uId}/ride/{rideId}:
+    get:
+      tags:
+        - ride
+      summary: Find ride by ID
+      description: Returns a single ride
+      operationId: getRideById
+      parameters:
+        - name: rideId
+          in: path
+          description: ID of ride to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ride not found
+    delete:
+      tags:
+        - ride
+      summary: Delete ride by ID
+      description: Deletes a single ride
+      operationId: deleteRideById
+      parameters:
+        - name: rideId
+          in: path
+          description: ID of ride to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ride not found
+  /users/{uId}/{password}:
+    get:
+      tags:
+        - user
+      summary: Login a user
+      description: Logins a user
+      operationId: loginUser
+      parameters:
+        - name: password
+          in: path
+          description: Password of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid Authentication supplied
+    put:
+      tags:
+        - user
+      summary: Update a user
+      description: Updates a user
+      operationId: updateUser
+      parameters:
+        - name: password
+          in: path
+          description: Password of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Updates a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid Authentication supplied
+    delete:
+      tags:
+        - user
+      summary: Delete a user
+      description: Deletes a user
+      operationId: deleteUser
+      parameters:
+        - name: password
+          in: path
+          description: Password of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: Invalid authentication supplied
+  /users:
+    post:
+      tags:
+        - user
+      summary: Creates a user
+      description: Creates a user
+      operationId: createUser
+      requestBody:
+        description: Creates a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid Authentication supplied
+components:
+  schemas:
+    Ride:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        startAddress:
+          type: string
+          example: 123 Main St
+        endAddress:
+          type: string
+          example: 456 Elm St
+        rideStatus:
+          type: string
+          example: Awaiting Driver
+        riderId:
+          type: string
+          example: abc123
+        cost:
+          type: number
+          example: 25.5
+        driverId:
+          type: string
+          example: abc123
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: def456
+        userName:
+          type: string
+          example: john_doe
+        email:
+          type: string
+          example: john.doe@example.com
+        phoneNumber:
+          type: string
+          example: '+1234567890'

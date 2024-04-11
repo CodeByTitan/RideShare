@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to RideShare!</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            overflow: auto; /* Add scrolling */
+        }
+        .form-container {
+            width: 100%; /* Adjust width as needed */
+            max-width: 400px; /* Adjust maximum width as needed */
+            margin-top: 20px; /* Add some space between the image and the form */
+        }
+        .brand-title {
+            font-size: 50px;
+            color: black;
+            text-align: center;
+            padding-top: 0px; /* Reduced padding-top to move the title upwards */
+            margin-bottom: 10px; /* You can adjust this value as needed */
+        }
+        .brand-slogan {
+            font-size: 24px;
+            color: #33AFFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .rides-img {
+            max-width: 50%;
+            padding-top: 30px;
+            max-height: 50%;
+            margin-bottom: 0px; /* Reduce or remove margin-bottom to move the title closer */
+        }
+    </style>
+</head>
+<body>
+
+<div class="centered-content">
+    <!-- Vector Art Image -->
+    <img class="rides-img" src="https://media.istockphoto.com/id/1141727347/vector/yellow-taxi-order-or-share-flat-line-illustration.jpg?s=612x612&w=0&k=20&c=a9d6IIhBYQpydgG-tabE7f25bKi_7nVdzO-BSRheVNc=" alt="RideShare Illustration">
+
+    <div class="form-container">
+        <!-- Your form content here -->
+        <div class="brand-title">RideShare</div>
+        <div class="brand-slogan">Connecting Rides, Uniting Paths</div>
+        <form id= "signInForm" action="/signin" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In with UNB Credentials</button>
+        </form>
+        <script>
+            document.getElementById('signInForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                var data = { username: username, password: password };
+               
+                fetch('/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Handle success response
+                })
+                .catch((error) => {
+                    console.log(data)
+                    console.error('Errors:', error);
+                    // Handle errors here
+                });
+            });
+            </script>
+    </div>
+</div>
+
+<!-- Bootstrap and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+<!--
+    <div class="text-center mt-3">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Sign In</button>
+        <button class="btn btn-secondary" data-toggle="modal" data-target="#signupModal">Sign Up</button>
+    </div>
+
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Sign In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" class="form-control" id="signupUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" class="form-control" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" class="form-control" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone</label>
+
+    <div class="text-center mt-3">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Sign In</button>
+        <button class="btn btn-secondary" data-toggle="modal" data-target="#signupModal">Sign Up</button>
+    </div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Sign In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" class="form-control" id="signupUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" class="form-control" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" class="form-control" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone</label>
+                    <input type="text" class="form-control" id="signupPhone" required>
+                </div>
+                <button type="submit" class="btn btn-secondary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+            <input type="text" class="form-control" id="signupPhone" required>
+                </div>
+                <button type="submit" class="btn btn-secondary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div> -->

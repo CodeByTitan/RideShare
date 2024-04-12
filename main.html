@@ -16,42 +16,45 @@
         }
 
         .centered-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    overflow: auto;
-    /* Add scrolling */
-}
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            overflow: auto;
+            /* Add scrolling */
+        }
 
-.form-container {
-    width: 100%;
-    /* Adjust width as needed */
-    max-width: 400px;
-    /* Adjust maximum width as needed */
-    margin-top: 20px;
-    /* Add some space between the image and the form */
-    text-align: center; /* Center align the content */
-}
+        .form-container {
+            width: 100%;
+            /* Adjust width as needed */
+            max-width: 400px;
+            /* Adjust maximum width as needed */
+            margin-top: 20px;
+            /* Add some space between the image and the form */
+            text-align: center;
+            /* Center align the content */
+        }
 
-.brand-title {
-    font-size: 30px;
-    color: black;
-    margin-bottom: 10px;
-    /* You can adjust this value as needed */
-    white-space: nowrap; /* Ensure text stays on a single line */
-}
+        .brand-title {
+            font-size: 30px;
+            color: black;
+            margin-bottom: 10px;
+            /* You can adjust this value as needed */
+            white-space: nowrap;
+            /* Ensure text stays on a single line */
+        }
 
-.brand-slogan {
-    font-size: 18px;
-    color: #33AFFF;
-    margin-bottom: 20px;
-}
+        .brand-slogan {
+            font-size: 18px;
+            color: #33AFFF;
+            margin-bottom: 20px;
+        }
 
-.form-group {
-    text-align: left; /* Align form elements to the left */
-}
+        .form-group {
+            text-align: left;
+            /* Align form elements to the left */
+        }
 
 
         .rides-img {
@@ -285,6 +288,11 @@
             document.getElementById('dashboardSection').classList.add('hidden');
         }
 
+        function showDashboard() {
+        document.getElementById('dashboardSection').style.display = 'block';
+        document.getElementById('signupSection').style.display = 'none';
+        document.getElementById('welcomeSection').style.display = 'none';
+    }
         document.addEventListener('DOMContentLoaded', function () {
             var signupFlagDiv = document.getElementById('showSignupFlag');
             var showSignup = signupFlagDiv && signupFlagDiv.getAttribute('data-show-signup') === 'True'; // Adjust the comparison based on how your template engine outputs booleans
@@ -307,7 +315,7 @@
             // Handle signup form submission
             var signupForm = document.getElementById('signupForm');
             if (signupForm) {
-                signupForm.addEventListener('submit', function (e) {    
+                signupForm.addEventListener('submit', function (e) {
                     e.preventDefault(); // Prevent the default form submission
 
                     var name = document.getElementById('signupName').value;
@@ -325,9 +333,13 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log('Success:', data);
-                            // Handle success response, such as showing the dashboard
-                            showDashboard();
+                            if (data.status === 'success' && data.show_dashboard) {
+                                // Function to show dashboard and hide other sections
+                                showDashboard();
+                            } else {
+                                // Handle errors or unsuccessful signup attempts
+                                alert(data.message || 'Signup failed. Please try again.');
+                            }
                         })
                         .catch((error) => {
                             console.error('Error:', error);

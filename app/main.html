@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to RideShare!</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            overflow: auto;
+            /* Add scrolling */
+        }
+
+        .form-container {
+            width: 100%;
+            /* Adjust width as needed */
+            max-width: 400px;
+            /* Adjust maximum width as needed */
+            margin-top: 20px;
+            /* Add some space between the image and the form */
+            text-align: center;
+            /* Center align the content */
+        }
+
+        .brand-title {
+            font-size: 30px;
+            color: black;
+            margin-bottom: 10px;
+            /* You can adjust this value as needed */
+            white-space: nowrap;
+            /* Ensure text stays on a single line */
+        }
+
+        .brand-slogan {
+            font-size: 18px;
+            color: #33AFFF;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+            /* Align form elements to the left */
+        }
+
+
+        .rides-img {
+            max-width: 50%;
+            padding-top: 30px;
+            max-height: 50%;
+            margin-bottom: 0px;
+            /* Reduce or remove margin-bottom to move the title closer */
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="centered-content" id="welcomeSection">
+        <!-- Vector Art Image -->
+        <img class="rides-img"
+            src="https://media.istockphoto.com/id/1141727347/vector/yellow-taxi-order-or-share-flat-line-illustration.jpg?s=612x612&w=0&k=20&c=a9d6IIhBYQpydgG-tabE7f25bKi_7nVdzO-BSRheVNc="
+            alt="RideShare Illustration">
+
+        <div class="form-container">
+            <!-- Your form content here -->
+            <div class="brand-title">RideShare</div>
+            <div class="brand-slogan">Connecting Rides, Uniting Paths</div>
+            <form id="signInForm" action="/signin" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In with UNB Credentials</button>
+            </form>
+            <script>
+                document.getElementById('signInForm').addEventListener('submit', function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+
+                    var username = document.getElementById('username').value;
+                    var password = document.getElementById('password').value;
+
+                    var data = { username: username, password: password };
+
+                    fetch('/signin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                        .then(response => response.json())
+                        // Inside the fetch .then block
+                        .then(data => {
+                            console.log('Success:', data);
+                            if (data.status === 'success' && data.show_signup) {
+                                // Display the signup form
+                                document.getElementById('signupSection').style.display = 'block';
+                                document.getElementById('welcomeSection').style.display = 'none';
+                            } else {
+                                // Handle other conditions, like authentication failure
+                                alert(data.message || 'Authentication failed');
+                            }
+                        })
+
+                        .catch((error) => {
+                            console.log(data)
+                            console.error('Errors:', error);
+                            // Handle errors here
+                        });
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="centered-content" id="signupSection" class="hidden">
+        <div class="form-container">
+            <div class="brand-title">Let's create a RideShare Account</div>
+            <div class="brand-slogan">Please fill the following information</div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Name:</label>
+                    <input type="text" class="form-control" id="signupName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" class="form-control" id="signupEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone:</label>
+                    <input type="text" class="form-control" id="signupPhone" name="phone" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="dashboardSection" class="hidden">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">RideShare App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signout">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <!-- Dashboard Content -->
+        <div class="container mt-5">
+            <h1>Welcome, {{username}}!</h1>
+            <div class="row">
+                <!-- Available Rides -->
+                <div class="col-md-6">
+                    <h2>Available Rides</h2>
+                    <ul class="list-group" id="availableRidesList">
+                        <!-- Dynamic list of available rides will be loaded here -->
+                    </ul>
+                </div>
+
+                <!-- Add a Ride -->
+                <div class="col-md-6">
+                    <h2>Add a Ride</h2>
+                    <form id="addRideForm">signupSection
+                        <div class="form-group">
+                            <label for="startAddress">Start Address</label>
+                            <input type="text" class="form-control" id="startAddress" name="startAddress" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endAddress">End Address</label>
+                            <input type="text" class="form-control" id="endAddress" name="endAddress" required>var
+                            welcomeSection = document.getElementById('welcomeSection');
+                            if (welcomeSection) {
+                            welcomeSection.classList.remove('hidden');
+                            }
+
+                        </div>
+                        <div class="form-group">
+                            <label for="cost">Cost</label>
+                            <input type="number" class="form-control" id="cost" name="cost" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Add your existing modals here -->
+
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Example JavaScript to toggle between Welcome and Dashboard sections
+        // Adjust this to manage your application's state and interactions
+
+
+        function showDashboard() {
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+        }
+
+        function showWelcome() {
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('welcomeSection').classList.remove('hidden');
+        }
+
+    // Add more JavaScript here to handle form submissions, API calls, etc.signupSection
+
+    </script>
+    <!-- JavaScript to handle form submission and load available rides
+ <script>
+    $(document).ready(function() {
+        // Example: Load available rides from the server
+        // You'll need to adjust this to match your application's API endpoints and data structure
+        function loadAvailableRides() {
+            $.get('/api/available-rides', function(data) {
+                $('#availableRidesList').empty();
+                data.forEach(function(ride) {
+                    $('#availableRidesList').append(`<li class="list-group-item">${ride.startAddress} to ${ride.endAddress} - $${ride.cost}</li>`);
+                });
+            });
+        }
+
+        // Call the function to load rides when the page is ready
+        loadAvailableRides();
+
+        // Example: Handle the add ride form submission
+        $('#addRideForm').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.post('/api/add-ride', formData, function(response) {
+                // Handle response, reload available rides, etc.
+                loadAvailableRides();
+            });
+        });
+    });
+</script> -->
+    <script>
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('signupSection').classList.add('hidden');
+        }
+
+        function showSignupForm() {
+            document.getElementById('signupSection').classList.remove('hidden');
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function showDashboard() {
+        document.getElementById('dashboardSection').style.display = 'block';
+        document.getElementById('signupSection').style.display = 'none';
+        document.getElementById('welcomeSection').style.display = 'none';
+    }
+        document.addEventListener('DOMContentLoaded', function () {
+            var signupFlagDiv = document.getElementById('showSignupFlag');
+            var showSignup = signupFlagDiv && signupFlagDiv.getAttribute('data-show-signup') === 'True'; // Adjust the comparison based on how your template engine outputs booleans
+
+            if (showSignup) {
+                showSignupForm();
+            } else {
+                var isAuthenticated = getCookie('isAuthenticated') === 'true';
+                if (isAuthenticated) {
+                    // User is authenticated, show the dashboard and hide the login form
+                    showDashboard();
+                } else {
+                    // User is not authenticated, show the login form and hide the dashboard
+                    document.getElementById('welcomeSection').classList.remove('hidden');
+                    document.getElementById('dashboardSection').classList.add('hidden');
+                    document.getElementById('signupSection').classList.add('hidden');
+                }
+            }
+
+            // Handle signup form submission
+            var signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+
+                    var name = document.getElementById('signupName').value;
+                    var email = document.getElementById('signupEmail').value;
+                    var phone = document.getElementById('signupPhone').value;
+
+                    var data = { name: name, email: email, phone: phone };
+
+                    fetch('/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success' && data.show_dashboard) {
+                                // Function to show dashboard and hide other sections
+                                showDashboard();
+                            } else {
+                                // Handle errors or unsuccessful signup attempts
+                                alert(data.message || 'Signup failed. Please try again.');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            // Handle errors here, such as showing an error message
+                        });
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
